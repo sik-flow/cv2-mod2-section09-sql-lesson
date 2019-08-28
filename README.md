@@ -1,22 +1,45 @@
 
 ### Questions
-* Subqueries - let's go more into them
-* Many to Many Joins
-* Noticed that halfway through the lesson they used column parsing
 
-### Objectives
-YWBAT 
-- perform various queries on a sqlite db
+### Outcomes
+YWBAT
+- perform a query that is ordered by a value
+- load query results as a dataframe
 - build functions to perform queries
-- perform join queries
+- execute a query using multiple joins
 
 ### Outline
-* Questions
-* Load in some data and do some queries
-* Build some functions to make our lives easier and foreshadow tomorrow's work
-* Do some join queries
-* perhaps some subqiueries
+* Take Questions
+* Warm Up
+* Connect to our sqlite db
+* Compare and contrast reading a query as a list vs reading a query as a dataframe
+* Practice various queries
+* Complete a Join Query
+* Complete a query using multiple Joins
 * wrap up
+
+### (5 min) Warm Up
+Given the following 'Employees' table, write a query that completes the following task.  Send your query to me in a private chat here in zoom.
+
+Expected Result:
+- IdNum, LName, FName and Salaryj
+- Order it by salary, starting with the highest salary
+![](images/table.png)
+
+<details>
+    <summary>Solution</summary>
+    
+    ```
+    SELECT IdNum, LName, FName, Salary
+    FROM Employees
+    ORDER BY Salary DESC
+    ```
+</details>
+
+
+```python
+# Getting connected to 
+```
 
 
 ```python
@@ -28,24 +51,30 @@ import sqlite3
 import matplotlib.pyplot as plt
 ```
 
+### Connecting to our sqlite db using sqlite3
+
 
 ```python
 conn = sqlite3.connect('data.sqlite')
 cursor = conn.cursor()
 ```
 
-
-```python
-def load_df(table_name=None, conn=None):
-    query = 'select * from {}'.format(table_name)
-    df = pd.read_sql(query, conn)
-    return df
-```
+### Listing the tables in our db
 
 
 ```python
 # table_names to be a list of my table_names
-table_names = [res[0] for res in cursor.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()]
+query = "SELECT name FROM sqlite_master WHERE type='table';"
+res = cursor.execute(query).fetchall()
+print(res) # Notice these are tuples, let's extract only the names in the next cell
+```
+
+    [('orderdetails',), ('payments',), ('offices',), ('customers',), ('orders',), ('productlines',), ('products',), ('employees',), ('contacts',), ('contacts2',)]
+
+
+
+```python
+table_names = [r[0] for r in res]
 table_names
 ```
 
@@ -65,6 +94,154 @@ table_names
 
 
 
+### Now  select everything from the employees table just to get a feel for it
+
+
+```python
+query = 'select * from employees;'
+res = cursor.execute(query).fetchall()
+res[:2]
+```
+
+
+
+
+    [('1002',
+      'Murphy',
+      'Diane',
+      'x5800',
+      'dmurphy@classicmodelcars.com',
+      '1',
+      '',
+      'President'),
+     ('1056',
+      'Patterson',
+      'Mary',
+      'x4611',
+      'mpatterso@classicmodelcars.com',
+      '1',
+      '1002',
+      'VP Sales')]
+
+
+
+### Now let's load this into a dataframe using the `.read_sql` method, we'll use some of the same components from above. 
+
+
+```python
+query = 'select * from employees;'
+df = pd.read_sql(query, conn)
+df.head() # Much better and more readable! 
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>employeeNumber</th>
+      <th>lastName</th>
+      <th>firstName</th>
+      <th>extension</th>
+      <th>email</th>
+      <th>officeCode</th>
+      <th>reportsTo</th>
+      <th>jobTitle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1002</td>
+      <td>Murphy</td>
+      <td>Diane</td>
+      <td>x5800</td>
+      <td>dmurphy@classicmodelcars.com</td>
+      <td>1</td>
+      <td></td>
+      <td>President</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1056</td>
+      <td>Patterson</td>
+      <td>Mary</td>
+      <td>x4611</td>
+      <td>mpatterso@classicmodelcars.com</td>
+      <td>1</td>
+      <td>1002</td>
+      <td>VP Sales</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1076</td>
+      <td>Firrelli</td>
+      <td>Jeff</td>
+      <td>x9273</td>
+      <td>jfirrelli@classicmodelcars.com</td>
+      <td>1</td>
+      <td>1002</td>
+      <td>VP Marketing</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1088</td>
+      <td>Patterson</td>
+      <td>William</td>
+      <td>x4871</td>
+      <td>wpatterson@classicmodelcars.com</td>
+      <td>6</td>
+      <td>1056</td>
+      <td>Sales Manager (APAC)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1102</td>
+      <td>Bondur</td>
+      <td>Gerard</td>
+      <td>x5408</td>
+      <td>gbondur@classicmodelcars.com</td>
+      <td>4</td>
+      <td>1056</td>
+      <td>Sale Manager (EMEA)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+### (3 min) What are the pros and cons of loading a sql query into a dataframe?
+- Pros
+    - 
+
+- Cons
+    -  
+
+
+```python
+def load_df(table_name=None, conn=None):
+    query = 'select * from {}'.format(table_name)
+    df = pd.read_sql(query, conn)
+    return df
+```
+
 ### A throwback favorite 
 
 
@@ -73,340 +250,6 @@ d = {} # table_name: dataframe of table
 for table_name in table_names:
     d[table_name] = load_df(table_name, conn)
 ```
-
-
-```python
-orderdetails_df = load_df('orderdetails', conn)
-orderdetails_df.head()
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>orderNumber</th>
-      <th>productCode</th>
-      <th>quantityOrdered</th>
-      <th>priceEach</th>
-      <th>orderLineNumber</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>10100</td>
-      <td>S18_1749</td>
-      <td>30</td>
-      <td>136.00</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>10100</td>
-      <td>S18_2248</td>
-      <td>50</td>
-      <td>55.09</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>10100</td>
-      <td>S18_4409</td>
-      <td>22</td>
-      <td>75.46</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>10100</td>
-      <td>S24_3969</td>
-      <td>49</td>
-      <td>35.29</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>10101</td>
-      <td>S18_2325</td>
-      <td>25</td>
-      <td>108.06</td>
-      <td>4</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```python
-products_df = load_df('products', conn)
-products_df.head()
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>productCode</th>
-      <th>productName</th>
-      <th>productLine</th>
-      <th>productScale</th>
-      <th>productVendor</th>
-      <th>productDescription</th>
-      <th>quantityInStock</th>
-      <th>buyPrice</th>
-      <th>MSRP</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>S10_1678</td>
-      <td>1969 Harley Davidson Ultimate Chopper</td>
-      <td>Motorcycles</td>
-      <td>1:10</td>
-      <td>Min Lin Diecast</td>
-      <td>This replica features working kickstand, front...</td>
-      <td>7933</td>
-      <td>48.81</td>
-      <td>95.70</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>S10_1949</td>
-      <td>1952 Alpine Renault 1300</td>
-      <td>Classic Cars</td>
-      <td>1:10</td>
-      <td>Classic Metal Creations</td>
-      <td>Turnable front wheels; steering function; deta...</td>
-      <td>7305</td>
-      <td>98.58</td>
-      <td>214.30</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>S10_2016</td>
-      <td>1996 Moto Guzzi 1100i</td>
-      <td>Motorcycles</td>
-      <td>1:10</td>
-      <td>Highway 66 Mini Classics</td>
-      <td>Official Moto Guzzi logos and insignias, saddl...</td>
-      <td>6625</td>
-      <td>68.99</td>
-      <td>118.94</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>S10_4698</td>
-      <td>2003 Harley-Davidson Eagle Drag Bike</td>
-      <td>Motorcycles</td>
-      <td>1:10</td>
-      <td>Red Start Diecast</td>
-      <td>Model features, official Harley Davidson logos...</td>
-      <td>5582</td>
-      <td>91.02</td>
-      <td>193.66</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>S10_4757</td>
-      <td>1972 Alfa Romeo GTA</td>
-      <td>Classic Cars</td>
-      <td>1:10</td>
-      <td>Motor City Art Classics</td>
-      <td>Features include: Turnable front wheels; steer...</td>
-      <td>3252</td>
-      <td>85.68</td>
-      <td>136.00</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```python
-query = 'select * from customers;'
-customers_df = pd.read_sql(query, conn)
-customers_df.head()
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>customerNumber</th>
-      <th>customerName</th>
-      <th>contactLastName</th>
-      <th>contactFirstName</th>
-      <th>phone</th>
-      <th>addressLine1</th>
-      <th>addressLine2</th>
-      <th>city</th>
-      <th>state</th>
-      <th>postalCode</th>
-      <th>country</th>
-      <th>salesRepEmployeeNumber</th>
-      <th>creditLimit</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>103</td>
-      <td>Atelier graphique</td>
-      <td>Schmitt</td>
-      <td>Carine</td>
-      <td>40.32.2555</td>
-      <td>54, rue Royale</td>
-      <td></td>
-      <td>Nantes</td>
-      <td></td>
-      <td>44000</td>
-      <td>France</td>
-      <td>1370</td>
-      <td>21000.00</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>112</td>
-      <td>Signal Gift Stores</td>
-      <td>King</td>
-      <td>Jean</td>
-      <td>7025551838</td>
-      <td>8489 Strong St.</td>
-      <td></td>
-      <td>Las Vegas</td>
-      <td>NV</td>
-      <td>83030</td>
-      <td>USA</td>
-      <td>1166</td>
-      <td>71800.00</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>114</td>
-      <td>Australian Collectors, Co.</td>
-      <td>Ferguson</td>
-      <td>Peter</td>
-      <td>03 9520 4555</td>
-      <td>636 St Kilda Road</td>
-      <td>Level 3</td>
-      <td>Melbourne</td>
-      <td>Victoria</td>
-      <td>3004</td>
-      <td>Australia</td>
-      <td>1611</td>
-      <td>117300.00</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>119</td>
-      <td>La Rochelle Gifts</td>
-      <td>Labrune</td>
-      <td>Janine</td>
-      <td>40.67.8555</td>
-      <td>67, rue des Cinquante Otages</td>
-      <td></td>
-      <td>Nantes</td>
-      <td></td>
-      <td>44000</td>
-      <td>France</td>
-      <td>1370</td>
-      <td>118200.00</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>121</td>
-      <td>Baane Mini Imports</td>
-      <td>Bergulfsen</td>
-      <td>Jonas</td>
-      <td>07-98 9555</td>
-      <td>Erling Skakkes gate 78</td>
-      <td></td>
-      <td>Stavern</td>
-      <td></td>
-      <td>4110</td>
-      <td>Norway</td>
-      <td>1504</td>
-      <td>81700.00</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-### Using PRAGMA helps identify primary key
-
-
-```python
-cursor.execute("PRAGMA table_info(contacts2);").fetchall()
-```
-
-
-
-
-    [(0, 'contact_id', 'INTEGER', 1, None, 0),
-     (1, 'first_name', 'TEXT', 1, None, 0),
-     (2, 'last_name', 'TEXT', 1, None, 0),
-     (3, 'email', 'text', 1, None, 0),
-     (4, 'phone', 'text', 1, None, 0)]
-
-
 
 ### WHY SHOULD YOU ALWAYS SPECIFY YOUR PRIMARY KEYS!?
 
