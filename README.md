@@ -8,6 +8,15 @@ YWBAT
 - build functions to perform queries
 - execute a query using multiple joins
 
+
+### Objectives
+- write an order by query on a given table
+- convert the customers table to a dataframe using pandas and sqlite3
+- compare and contrast using a dataframe vs using the results as a list, from a query
+- write a single join query
+- write a multiple join query
+
+
 ### Outline
 * Take Questions
 * Warm Up
@@ -25,7 +34,7 @@ Expected Result:
 - IdNum, LName, FName and Salary
 - Order it by salary, starting with the highest salary
 
-<img align="center" src="images/table.png"/>
+<img src="images/table.png" width=500 align="center">
 
 <details>
     <summary>Solution</summary>
@@ -232,7 +241,7 @@ pd.read_sql(query, conn).head()
     
 </details>
 
-### Query Exercise 4
+# Query Exercise 4
 
 Write a query that results in the following:
 
@@ -271,7 +280,7 @@ pd.read_sql(query, conn).head(2)
         
 </details>
 
-### Query Exercise 5
+# Query Exercise 5
 
 Write a query that results in the following:
 
