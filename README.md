@@ -232,7 +232,7 @@ pd.read_sql(query, conn).head()
     
 </details>
 
-# Query Exercise 4
+### Query Exercise 4
 
 Write a query that results in the following:
 
@@ -271,7 +271,7 @@ pd.read_sql(query, conn).head(2)
         
 </details>
 
-# Query Exercise 5
+### Query Exercise 5
 
 Write a query that results in the following:
 
