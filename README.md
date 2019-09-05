@@ -24,7 +24,7 @@ Given the following 'Employees' table, write a query that completes the followin
 Expected Result:
 - IdNum, LName, FName and Salary
 - Order it by salary, starting with the highest salary
-![](images/table.png)
+<img src="images/table.png" width=500/>>
 
 <details>
     <summary>Solution</summary>
