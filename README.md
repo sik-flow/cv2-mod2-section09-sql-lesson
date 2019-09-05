@@ -348,8 +348,3 @@ query = """
 ```
 
 </details>
-
-
-# Lesson Plan Document
-
-{google_docs}https://docs.google.com/document/d/e/2PACX-1vRTAhK_sQvMf6wskfqh2D72h2VJWZ_0ouoYw_h2Sgulafjd9qv_bDOtZrtjoGqPq8JtdDmdOBsmCArh/pub{/google_docs}
