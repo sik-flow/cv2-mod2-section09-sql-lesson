@@ -24,7 +24,7 @@ Given the following 'Employees' table, write a query that completes the followin
 Expected Result:
 - IdNum, LName, FName and Salary
 - Order it by salary, starting with the highest salary
-<img align="center" src="images/table.png" width=500/>
+![](images/table.png)
 
 <details>
     <summary>Solution</summary>
@@ -120,7 +120,7 @@ for table_name in table_names:
 
 Create the following table using the customers table and the orders table
 
-<img align="center" src="images/query1.png" width="500"/>
+<img src="images/query1.png" width="500"/>
 
 
 ```python
@@ -160,7 +160,7 @@ Create a query that results in a table with the every customer number for an emp
 
 Ex:
 
-<img align="center" src="images/query2.png" width="500"/>
+<img src="images/query2.png" width="500"/>
 
 
 ```python
@@ -200,7 +200,7 @@ Create a query that results in a table with every order number for every custome
 
 Ex:
 
-<img align="center" src="images/query3.png" width="500"/>
+<img src="images/query3.png" width="500"/>
 
 
 ```python
@@ -241,7 +241,7 @@ Employee First and Last Name, order number and each product code for that order.
 
 Screenshot:
 
-<img align="center" src="images/query4.png" width="500"/>
+<img src="images/query4.png" width="500"/>
 
 
 ```python
@@ -274,13 +274,13 @@ pd.read_sql(query, conn).head(2)
 
 Write a query that results in the following:
 
-Employee First and Last Name and each product name they sold
+Employee First and Last Name and each product name they sold, add an alias to match the image below
 
 *There should be a row for each product name*
 
 Screenshot:
 
-<img align="center" src="images/query5.png" width="500"/>
+<img src="images/query5.png" width="500"/>
 
 
 ```python
@@ -293,7 +293,6 @@ pd.read_sql(query, conn).head(2)
 ```
 
 <details>
-
     <summary>Query 5 Solution</summary>
     
     ```
@@ -312,37 +311,15 @@ pd.read_sql(query, conn).head(2)
         
 </details>
 
-
-```python
-# Now let's add product name with some final group by to remove duplicates
-# removing order number and product code
-query = """
-        select e.firstname, e.lastname, p.productName
-        from employees as e
-        join customers as c
-        on e.employeenumber = c.salesrepemployeenumber
-        join orders as o
-        on o.customerNumber = c.customerNumber
-        join orderdetails as od
-        on od.orderNumber = o.orderNumber
-        join products as p
-        on p.productCode = od.productCode;"""
-
-pd.read_sql(query, conn).head(2)
-```
-
 ### Great! It's working. Let's add some group by to remove duplicates!
 
 **Add aliases to result in the following**
 
-<img align="center" src="images/query5.png" width="500"/>
+<img src="images/query5.png" width="500"/>
 
 
 ```python
-# alias the columns and add group by at the bottom
-# alias firstName as fn
-# alias lastName as ln
-# alias productName as pn
+# remember the alias' from above
 
 query = '''SELECT ...'''
 
