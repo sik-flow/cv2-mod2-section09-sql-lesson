@@ -293,6 +293,7 @@ pd.read_sql(query, conn).head(2)
 ```
 
 <details>
+
     <summary>Query 5 Solution</summary>
     
     ```
