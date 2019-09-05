@@ -24,7 +24,7 @@ Given the following 'Employees' table, write a query that completes the followin
 Expected Result:
 - IdNum, LName, FName and Salary
 - Order it by salary, starting with the highest salary
-<img src="images/table.png" width=500/>
+<img align="center" src="images/table.png" width=500/>
 
 <details>
     <summary>Solution</summary>
@@ -120,7 +120,7 @@ for table_name in table_names:
 
 Create the following table using the customers table and the orders table
 
-<img src="images/query1.png" width="500"/>
+<img align="center" src="images/query1.png" width="500"/>
 
 
 ```python
@@ -160,7 +160,7 @@ Create a query that results in a table with the every customer number for an emp
 
 Ex:
 
-<img src="images/query2.png" width="500"/>
+<img align="center" src="images/query2.png" width="500"/>
 
 
 ```python
@@ -200,7 +200,7 @@ Create a query that results in a table with every order number for every custome
 
 Ex:
 
-<img src="images/query3.png" width="500"/>
+<img align="center" src="images/query3.png" width="500"/>
 
 
 ```python
@@ -241,7 +241,7 @@ Employee First and Last Name, order number and each product code for that order.
 
 Screenshot:
 
-<img src="images/query4.png" width="500"/>
+<img align="center" src="images/query4.png" width="500"/>
 
 
 ```python
@@ -280,7 +280,7 @@ Employee First and Last Name and each product name they sold
 
 Screenshot:
 
-<img src="images/query5.png" width="500"/>
+<img align="center" src="images/query5.png" width="500"/>
 
 
 ```python
@@ -334,7 +334,7 @@ pd.read_sql(query, conn).head(2)
 
 **Add aliases to result in the following**
 
-<img src="images/query5.png" width="500"/>
+<img align="center" src="images/query5.png" width="500"/>
 
 
 ```python
